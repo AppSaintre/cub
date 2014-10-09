@@ -100,12 +100,15 @@ __host__ __device__ __forceinline__ cudaError_t Debug(
 /**
  * \brief Log macro for printf statements.
  */
-#if (CUB_PTX_ARCH == 0)
-    #define CubLog(format, ...) printf(format,__VA_ARGS__);
-#elif (CUB_PTX_ARCH >= 200)
-    #define CubLog(format, ...) printf("[block %d, thread %d]: " format, blockIdx.x, threadIdx.x, __VA_ARGS__);
+#if defined(CUB_LOG)
+    #if (CUB_PTX_ARCH == 0)
+        #define CubLog(format, ...) printf(format,__VA_ARGS__);
+    #elif (CUB_PTX_ARCH >= 200)
+        #define CubLog(format, ...) printf("[block %d, thread %d]: " format, blockIdx.x, threadIdx.x, __VA_ARGS__);
+    #endif
+#else
+    #define CubLog(format, ...) ;
 #endif
-
 
 
 
